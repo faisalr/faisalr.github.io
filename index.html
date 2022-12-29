@@ -2,99 +2,177 @@
 <html>
 
 <head>
+    <title>Moon Info</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="astro.js"></script>
 </head>
 
-<body>
-    <h1 style="font-weight: bolder">Astronomy Engine</h1>
+<body id="main_content_wrap" class="inner">
+    <h1>Moon Info</h1>
 
-    <img id="pic" style="float:right" src="img/0502.jpg" width="500" height="500" />
+    <h2>Observer</h2>
+    <table cellpadding="5" cellspacing="0" border="1">
+        <tr>
+            <td>
+                <div>Date and Time:</div>
+                <div>
+                    <input type="checkbox" id="AutoTimeCheckBox" onchange="OnToggleAutoTime()">
+                    <label for="AutoTimeCheckBox">Automatic</label>
+                </div>
+            </td>
+            <td>
+                <input type="datetime" id="DateTimeBox" size="30">
+            </td>
+        </tr>
+        <tr>
+            <td>Latitude:</td>
+            <td><input type="text" id="EditLatitude" pattern="[\-\+]?\d+(\.\d*)?" size="10"></td>
+        </tr>
+        <tr>
+            <td>Longitude:</td>
+            <td><input type="text" id="EditLongitude" pattern="[\-\+]?\d+(\.\d*)?" size="10"></td>
+        </tr>
+        <tr>
+            <td>Elevation (m):</td>
+            <td><input type="text" id="EditElevation" pattern="[\-\+]?\d+(\.\d*)?" size="10"></td>
+        </tr>
+        <tr>
+            <td>Phase</td>
+            <td id="MoonPhaseAngle" class="Numeric"></td>
+        </tr>
+        <tr>
+            <td>illumination:</td>
+            <td id="illumination" class="Numeric"></td>
+        </tr>
+        <tr>
+            <td>Moonrise</td>
+            <td id="moonrise" class="Numeric"></td>
+        </tr>
+        <tr>
+            <td>Moonset</td>
+            <td id="moonset" class="Numeric"></td>
+        </tr>
 
-    <table cellspacing="0" id="CalcTable">
-        <tbody>
-            <tr>
-                <th>Variable</th>
-                <th>Value</th>
-            </tr>
+        <tr>
+            <td><span id="Quarter1"></span></td>
+            <td><span id="DateTime1" class="Numeric"></span></td>
+        </tr>
 
-            <tr>
-                <td>Date</td>
-                <td><input onchange="ChangeDate()" type="date" id="dateAndTime"></td>
-            </tr>
+        <tr>
+            <td><span id="Quarter2"></span></td>
 
-            <tr>
-                <td>Latitude</td>
-                <td> <input onchange="ChangeDate()" type="number" id="latitude" min="-90" max="90">
-                </td>
-            </tr>
+            <td><span id="DateTime2" class="Numeric"></span></td>
+        </tr>
 
-            <tr>
-                <td>Longitude</td>
-                <td> <input onchange="ChangeDate()" type="number" id="longitude" min="-180" max="180">
-                </td>
-            </tr>
+        <tr>
+            <td><span id="Quarter3"></span></td>
 
-            <tr>
-                <td>Phase</td>
-                <td id="MoonPhaseAngle" class="Numeric"> <span id="MoonPhaseAngle">?</span>°</td>
-            </tr>
+            <td><span id="DateTime3" class="Numeric"></span></td>
+        </tr>
 
-            <tr>
-                <td>Moonrise</td>
-                <td id="Moonrise" class="Numeric">?</td>
-            </tr>
-            <tr>
-                <td>Moonset</td>
-                <td id="Moonset" class="Numeric">?</td>
-            </tr>
+        <tr>
+            <td><span id="Quarter4"></span></td>
 
-            <tr>
-                <td>Azimuth</td>
-                <td id="Moon_az" class="Numeric">?</td>
-            </tr>
+            <td><span id="DateTime4" class="Numeric"></span></td>
+        </tr>
 
-            <tr>
-                <td>Altitude</td>
-                <td id="Moon_alt" class="Numeric">?</td>
-            </tr>
+        <tr>
+            <td>Azimuth</td>
+            <td id="Moon_az" class="Numeric"></td>
+        </tr>
 
-            <tr>
-                <td>Right Ascension</td>
-                <td id="Moon_ra" class="Numeric">?</td>
-            </tr>
-            <tr>
-                <td>Declination</td>
-                <td id="Moon_dec" class="Numeric">?</td>
-            </tr>
-
-        </tbody>
+        <tr>
+            <td>Altitude</td>
+            <td id="Moon_alt" class="Numeric">?</td>
+        </tr>
     </table>
 
-    </div>
-    <footer>
-    </footer>
+    <img id="pic" width="500" height="500" />
+    <table cellpadding="5" cellspacing="0" id="CalcTable" border="1">
+        <tr>
+            <td></td>
+            <td class="NumHeader">RA</td>
+            <td class="NumHeader">DEC</td>
+        </tr>
 
-    <script>
+        <tr>
+            <td>Moon</td>
+            <td id="Moon_ra" class="Numeric"></td>
+            <td id="Moon_dec" class="Numeric"></td>
+        </tr>
 
-        navigator.geolocation.getCurrentPosition(function (location) {
-            console.log(location.coords.latitude);
-            console.log(location.coords.longitude);
-            console.log(location.coords.accuracy);
-            let latText = document.getElementById("latitude");
-            let longText = document.getElementById("longitude");
-            latText.value = location.coords.latitude;
-            longText.value = location.coords.longitude;
-        });
+    </table>
 
-        function FormatCoord(x) {
-            return x.toFixed(2);
+    <p>
+        This is a sample page for the open-source
+        <a href="https://github.com/cosinekitty/astronomy/">Astronomy Engine</a>.
+        All of the source code and documentation is available there.
+        Also, try using your browser's View Source command to look at how this page works.
+    </p>
+
+</body>
+
+<script src="astro.js"></script>
+<script>
+    function OnToggleAutoTime() {
+        const checkbox = document.getElementById('AutoTimeCheckBox');
+        const editbox = document.getElementById('DateTimeBox');
+        if (checkbox.checked) {
+            editbox.setAttribute('readonly', true);
+        } else {
+            editbox.removeAttribute('readonly');
+        }
+    }
+
+    window.onload = function () {
+        const StorageKey = 'AstroDemo.Options';
+        var Options;
+
+        function ParseDate(s) {
+            return new Date((s || '').replace(' ', 'T'));   // Safari doesn't like the space character
         }
 
-        function ChangeDate()
-        {
-            console.log(document.getElementById('dateAndTime').value);
-            Update(new Date(document.getElementById('dateAndTime').value))
+        function IsValidNumber(s) {
+            return typeof s === 'string' && /^[\-\+]?\d+(\.\d*)?$/.test(s);
+        }
+
+        function IsValidDate(s) {
+            const d = ParseDate(s);
+            return Number.isFinite(d.getTime());
+        }
+
+        function LoadOptions() {
+            let options;
+            try {
+                options = JSON.parse(window.localStorage.getItem(StorageKey));
+            } catch (e) {
+            }
+
+            if (!options) options = {};
+            if (!IsValidNumber(options.latitude)) options.latitude = '30';
+            if (!IsValidNumber(options.longitude)) options.longitude = '-90';
+            if (!IsValidNumber(options.elevation)) options.elevation = '0';
+            if (typeof options.automatic !== 'boolean') options.automatic = true;
+            if (!IsValidDate(options.date)) options.date = FormatDate(new Date());
+            return options;
+        }
+
+        function SaveOptions() {
+            try {
+                window.localStorage.setItem(StorageKey, JSON.stringify(Options));
+            } catch (e) {
+            }
+        }
+
+        function Init() {
+            let options = LoadOptions();
+            document.getElementById('EditLatitude').value = options.latitude;
+            document.getElementById('EditLongitude').value = options.longitude;
+            document.getElementById('EditElevation').value = options.elevation;
+            document.getElementById('DateTimeBox').value = options.date;
+            let checkbox = document.getElementById('AutoTimeCheckBox');
+            checkbox.checked = options.automatic;
+            OnToggleAutoTime();
+            return options;
         }
 
         function Pad(s, w) {
@@ -115,34 +193,89 @@
             return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
         }
 
-        function Update(now) {
-            var phase = Astronomy.MoonPhase(now);
-            var x = Math.trunc((phase * 2) + 502);
-            var z = String(x).padStart(4, '0');
-            var img = "https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005048/frames/730x730_1x1_30p/moon." + z + ".jpg";
-
-            let observer = new Astronomy.Observer(33, 33, 0);
-            let equ_2000 = Astronomy.Equator(Astronomy.Body.Moon, now, observer, false, true);
-            let equ_ofdate = Astronomy.Equator(Astronomy.Body.Moon, now, observer, true, true);
-            let hor = Astronomy.Horizon(now, observer, equ_ofdate.ra, equ_ofdate.dec, 'normal');
-            let moonrise = Astronomy.SearchRiseSet('Moon', observer, +1, now, 300);
-            let moonset = Astronomy.SearchRiseSet('Moon', observer, -1, now, 300);
-            document.getElementById('Moon_ra').innerText = FormatCoord(equ_2000.ra);
-            document.getElementById('Moon_dec').innerText = FormatCoord(equ_2000.dec);
-            document.getElementById('Moon_az').innerText = FormatCoord(hor.azimuth);
-            document.getElementById('Moon_alt').innerText = FormatCoord(hor.altitude);
-            document.getElementById('Moonrise').innerText = FormatDate(moonrise.date);
-            document.getElementById('Moonset').innerText = FormatDate(moonset.date);
-            var current = now.toISOString().substring(0, 10);
-            document.getElementById('dateAndTime').value = current;
-            document.getElementById('MoonPhaseAngle').innerText = phase.toFixed(3) + "°";
-            document.getElementById('pic').src = img;
-            console.log(document.getElementById('dateAndTime').value);
+        function FormatCoord(x) {
+            return x.toFixed(2);
         }
 
-        var d = new Date();
-        Update(d);
-    </script>
-</body>
+        const BodyList = [
+            'Sun', 'Moon', 'Mercury', 'Venus', 'Mars',
+            'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'
+        ];
+
+        function UpdateScreen() {
+            const autotime = document.getElementById('AutoTimeCheckBox').checked;
+            const timebox = document.getElementById('DateTimeBox');
+            let text_latitude = document.getElementById('EditLatitude').value;
+            let text_longitude = document.getElementById('EditLongitude').value;
+            let text_elevation = document.getElementById('EditElevation').value;
+            let date;
+
+            if (autotime) {
+                // Automatically update the date/time every second, using the computer's clock.
+                date = new Date();
+                timebox.value = FormatDate(date);
+            } else {
+                // Try to parse a date/time from the user's input.
+                date = ParseDate(timebox.value);
+            }
+
+            if (!IsValidDate(timebox.value) || !IsValidNumber(text_latitude) || !IsValidNumber(text_longitude) || !IsValidNumber(text_elevation)) {
+                // Bail out until user corrects problems in the observer coordinates.
+                // Gray out the whole table so the user knows there is something wrong.
+                document.getElementById('CalcTable').style.display = 'none';
+            } else {
+                document.getElementById('CalcTable').style.display = '';
+
+                let latitude = parseFloat(text_latitude);
+                let longitude = parseFloat(text_longitude);
+                let elevation = parseFloat(text_elevation);
+                if (latitude !== Options.latitude || longitude !== Options.longitude || elevation !== Options.elevation || Options.automatic !== autotime) {
+                    Options = {
+                        latitude: text_latitude,
+                        longitude: text_longitude,
+                        elevation: text_elevation,
+                        automatic: autotime,
+                        date: timebox.value
+                    };
+                    SaveOptions();
+                }
+
+                var phase = Astronomy.MoonPhase(date);
+                document.getElementById('MoonPhaseAngle').innerText = phase.toFixed(3) + "°";
+                let illum = Astronomy.Illumination(Astronomy.Body.Moon, date);
+                let illu = (illum.phase_fraction * 100).toFixed(2) + "%";
+                document.getElementById('illumination').innerText = illu;
+                let observer = new Astronomy.Observer(latitude, longitude, elevation);
+                let equ_2000 = Astronomy.Equator(Astronomy.Body.Moon, date, observer, false, true);
+                let equ_ofdate = Astronomy.Equator(Astronomy.Body.Moon, date, observer, true, true);
+                let hor = Astronomy.Horizon(date, observer, equ_ofdate.ra, equ_ofdate.dec, 'normal');
+                document.getElementById(`Moon_ra`).innerText = FormatCoord(equ_2000.ra);
+                document.getElementById(`Moon_dec`).innerText = FormatCoord(equ_2000.dec);
+                document.getElementById(`Moon_az`).innerText = FormatCoord(hor.azimuth);
+                document.getElementById(`Moon_alt`).innerText = FormatCoord(hor.altitude);
+                let moonrise = Astronomy.SearchRiseSet('Moon', observer, +1, date, 300);
+                let moonset = Astronomy.SearchRiseSet('Moon', observer, -1, date, 300);
+                document.getElementById("moonrise").innerText = FormatDate(moonrise.date);
+                document.getElementById("moonset").innerText = FormatDate(moonset.date);
+                var QuarterName = ['New Moon', 'First Quarter', 'Full Moon', 'Third Quarter'];
+                for (let i = 1; i <= 4; ++i) {
+                    var mq = (i == 1) ? Astronomy.SearchMoonQuarter(date) : Astronomy.NextMoonQuarter(mq);
+                    document.getElementById(`DateTime${i}`).innerText = FormatDate(mq.time.date);
+                    document.getElementById(`Quarter${i}`).innerText = QuarterName[mq.quarter];
+                }
+
+                var x = Math.trunc((phase * 2) + 502);
+                var z = String(x).padStart(4, '0');
+                var img = "https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005048/frames/730x730_1x1_30p/moon." + z + ".jpg";
+                document.getElementById('pic').src = img;
+            }
+
+            setTimeout(UpdateScreen, 1000);
+        }
+
+        Options = Init();
+        UpdateScreen();
+    }
+</script>
 
 </html>
